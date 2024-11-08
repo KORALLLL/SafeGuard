@@ -1,0 +1,126 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.db
+*.sqlite3
+db.sqlite3
+
+# If using SQLite database files
+*.sqlite3
+
+# Celery worker logs
+celerybeat-schedule
+celerybeat.pid
+*.celery.pid
+# Celery beat schedule file
+celerybeat-schedule
+celerybeat.pid
+
+# Celery worker/beat log files
+*.celery.pid
+*.log
+
+# Celery worker directories (optional)
+celery/
+
+
+# Redis dumps
+dump.rdb
+appendonly.aof
+# Redis dump files
+dump.rdb
+*.rdb
+
+# Redis append-only files
+appendonly.aof
+*.aof
+
+# Redis log files
+redis.log
+*.log
+
+
+# RabbitMQ logs and database
+*.log
+*.pid
+mnesia/
+
+# Venv and other Python environment files
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# PyCharm
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# MyPy
+.mypy_cache/
+
+# Pyre
+.pyre/
+
+
+# pytest
+.cache/
+.pytest_cache/
+
+# Coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+.idea
+
+.env
+.venv
