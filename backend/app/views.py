@@ -13,3 +13,4 @@ def upload_image(request):
     resp = CheckImageSerializer(create_check_image(serializer.data['img']))
     if resp.is_valid():
         return Response({'status': 'OK'})
+    return Response({'status': 'error'})
