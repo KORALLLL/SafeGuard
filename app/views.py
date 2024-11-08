@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 from .serializers import CheckImageSerializer
-from .services import  create_check_image
+from .services import create_check_image
 
 
 @api_view(['POST'])

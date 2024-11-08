@@ -1,5 +1,5 @@
 """
-URL configuration for content_analysis project.
+URL configuration for SafeGuard project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
