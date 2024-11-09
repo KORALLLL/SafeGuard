@@ -13,3 +13,4 @@ def upload_image(request):
     check_image = create_check_image(request.FILES['img'])
     resp = CheckImageSerializer(check_image)
     return Response({'status': 'OK', 's3_url': resp.data['s3_url']})
+
