@@ -11,7 +11,7 @@ collection = chroma_client.get_or_create_collection(name='faces')
 POLLING_URL = os.getenv('POLLING_URL', None)
 print("model Initialized")
 MODEL_NAME = "deepface"
-device = 'cuda:0'
+device = 'cuda:0' 
 
 model = timm.create_model(
     'vit_giant_patch14_reg4_dinov2.lvd142m',
