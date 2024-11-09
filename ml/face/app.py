@@ -1,28 +1,20 @@
-import time, torch, timm
-import requests, os
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
+import time
+import requests, os, torch
 import chromadb
-from chromadb import Documents, EmbeddingFunction, Embedding
+from chromadb import EmbeddingFunction
+from chromadb.api.types import Embedding
+from deepface import DeepFace
 from typing import cast
-from PIL import Image
+import tensorflow as tf
+tf.config.experimental.set_visible_devices([], 'GPU')
 
 CHROMADB_URL = os.getenv('CHROMADB_URL', 'http://chromadb:8000')
 chroma_client = chromadb.HttpClient(host='chromadb', port='8000')
 collection = chroma_client.get_or_create_collection(name='faces')
-
-POLLING_URL = os.getenv('POLLING_URL', None)
-print("model Initialized")
-MODEL_NAME = "deepface"
-device = 'cuda:0' 
-
-model = timm.create_model(
-    'vit_giant_patch14_reg4_dinov2.lvd142m',
-    pretrained=True,
-    num_classes=0,
-)
-
-model = model.eval().to(device)
-data_config = timm.data.resolve_model_data_config(model)
-transforms = timm.data.create_transform(**data_config, is_training=False)
 
 
 def get_non_empty_response(url):
@@ -64,12 +56,11 @@ def download_image(image_url, save_path='image.jpg'):
 
 
 def compute_and_add_in_db(img_path, img_id):
-    image = Image.open(img_path).convert("RGB")
-    with torch.inference_mode():
-        output = model.forward_features(transforms(image).unsqueeze(0).to(device))
-        embedding_objs = model.forward_head(output, pre_logits=True)
-
-    emb = embedding_objs
+    embedding_objs = DeepFace.represent(
+        model_name="GhostFaceNet",
+        img_path=img_path,
+    )[0]['embedding']
+    emb = torch.Tensor(embedding_objs)
     emb /= emb.norm(dim=-1)
 
     emb = cast(Embedding, emb.squeeze().cpu().numpy())
@@ -91,6 +82,11 @@ def get_data(img_path, img_id):
         "result": embeds.ids
     }
     return json_res
+
+
+POLLING_URL = os.getenv('POLLING_URL', None)
+print("model Initialized")
+MODEL_NAME = "deepface"
 
 
 def main():
