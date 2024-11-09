@@ -10,27 +10,28 @@ services:
     networks:
       - net
 
-  # chromadb:
-  #   build:
-  #     context: ./ml/chromadb/
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8001:8000"
-  #   networks:
-  #     - net
+  chromadb:
+    build:
+      context: ./ml/chromadb/
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    networks:
+      - net
 
   # clip:
   #   build:
   #     context: ./ml/clip
   #     dockerfile: Dockerfile
-  #   networks:
-  #     - net
-  #   environment:
-  #     - POLLING_URL=http://backend:8000
-  #     - CHROMADB_URL=http://chromadb:8000
-  #   depends_on:
-  #     - backend
-  #     - chromadb
+    # networks:
+    #   - net
+    # runtime: nvidia
+    # environment:
+    #   - POLLING_URL=http://backend:8000
+    #   - CHROMADB_URL=http://chromadb:8000
+    # depends_on:
+    #   - backend
+    #   - chromadb
 
   # face:
   #   build:

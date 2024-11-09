@@ -1,8 +1,8 @@
 import time
 import requests, os, torch
-from deepface import DeepFace
 import chromadb
-from chromadb import Documents, EmbeddingFunction, Embedding
+from chromadb import Documents, EmbeddingFunction
+from chromadb.api.types import Embedding
 from typing import cast
 import tensorflow as tf
 tf.config.experimental.set_visible_devices([], 'GPU')
