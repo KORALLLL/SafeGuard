@@ -12,3 +12,4 @@ def create_check_image(img):
     url = s3.generate_link(file_name)
     check_image.s3_url = url
     check_image.save()
+    return check_image
