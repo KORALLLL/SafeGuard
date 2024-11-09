@@ -7,7 +7,8 @@ from typing import cast
 import tensorflow as tf
 tf.config.experimental.set_visible_devices([], 'GPU')
 
-chroma_client = chromadb.HttpClient(host='0.0.0.0', port='8000')
+CHROMADB_URL = os.getenv('CHROMADB_URL', 'http://chromadb:8000')
+chroma_client = chromadb.HttpClient(host='chromadb', port='8000')
 collection = chroma_client.get_or_create_collection(name='clip')
 
 
