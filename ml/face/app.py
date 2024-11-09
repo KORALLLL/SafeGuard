@@ -5,7 +5,8 @@ from chromadb import Documents, EmbeddingFunction, Embedding
 from typing import cast
 from PIL import Image
 
-chroma_client = chromadb.HttpClient(host='0.0.0.0', port='8000')
+CHROMADB_URL = os.getenv('CHROMADB_URL', 'http://chromadb:8000')
+chroma_client = chromadb.HttpClient(host='chromadb', port='8000')
 collection = chroma_client.get_or_create_collection(name='faces')
 
 POLLING_URL = os.getenv('POLLING_URL', None)
