@@ -10,8 +10,6 @@ def upload_image(request):
     serializer = CheckImageSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
 
-    check_image = create_check_image(serializer.validated_data['img'])
+    check_image = create_check_image(request.FILES['img'])
     resp = CheckImageSerializer(check_image)
-    if resp.is_valid():
-        return Response({'status': 'OK'})
-    return Response({'status': 'error'})
+    return Response({'status': 'OK', 's3_url': resp.data['s3_url']})
