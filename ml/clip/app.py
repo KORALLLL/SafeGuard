@@ -1,6 +1,5 @@
 import time
 import requests, os, torch
-from deepface import DeepFace
 import chromadb
 from chromadb import Documents, EmbeddingFunction, Embedding
 from typing import cast
