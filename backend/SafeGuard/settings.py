@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,8 +29,7 @@ SECRET_KEY = 'django-insecure-+#c5n9++9v_^dj2@i+uz2&h*1dypiss9a^c1#!mc_6i$j5(%t5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['87.242.118.47:8000', '172.16.0.48']
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -148,3 +148,5 @@ AWS_S3_HOST = f'https://{AWS_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_BUCKET_NAME}.s3.amazonaws.com'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+ROOT_URLCONF = 'SafeGuard.urls'

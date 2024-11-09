@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - net
+
+  # chromadb:
+  #   build:
+  #     context: ./ml/chromadb/
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8001:8000"
+  #   networks:
+  #     - net
+
+  # clip:
+  #   build:
+  #     context: ./ml/clip
+  #     dockerfile: Dockerfile
+  #   networks:
+  #     - net
+  #   environment:
+  #     - POLLING_URL=http://backend:8000
+  #     - CHROMADB_URL=http://chromadb:8000
+  #   depends_on:
+  #     - backend
+  #     - chromadb
+
+  # face:
+  #   build:
+  #     context: ./ml/face
+  #     dockerfile: Dockerfile
+  #   networks:
+  #     - net
+  #   environment:
+  #     - POLLING_URL=http://backend:8000
+  #     - CHROMADB_URL=http://chromadb:8000
+  #   depends_on:
+  #     - backend
+  #     - chromadb
+    
+networks:
+  net:
+    driver: bridge
+
