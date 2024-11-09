@@ -16,3 +16,4 @@ tqdm==4.67.0
 urllib3==2.2.3
 python-dotenv
 django-storages
+boto3
