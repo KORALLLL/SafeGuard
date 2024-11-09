@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-+#c5n9++9v_^dj2@i+uz2&h*1dypiss9a^c1#!mc_6i$j5(%t5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['87.242.118.47:8000']
+ALLOWED_HOSTS = ['87.242.118.47:8000', '172.16.0.48']
 
 
 # Application definition
@@ -137,13 +137,14 @@ MEDIA_URL = '/media/'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-# Настройки S3
+# Настройки AWS S3
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_REGION_NAME = 'us-east-1'  # регион S3
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
+AWS_REGION = 'us-east-1'
+AWS_S3_HOST = f'https://{AWS_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com'
 
-# Настройка для сохранения медиафайлов в S3
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# Настройки для хранения медиафайлов в S3
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_BUCKET_NAME}.s3.amazonaws.com'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
