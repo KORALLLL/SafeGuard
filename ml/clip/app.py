@@ -2,7 +2,8 @@ __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
-import time, torch, timm
+import time, torch
+from transformers import CLIPModel, CLIPProcessor, CLIPConfig, CLIPTokenizer
 import requests, os
 import chromadb
 from chromadb import EmbeddingFunction
@@ -19,15 +20,11 @@ print("model Initialized")
 MODEL_NAME = "clip"
 device = 'cuda:0' 
 
-model = timm.create_model(
-    'vit_giant_patch14_reg4_dinov2.lvd142m',
-    pretrained=True,
-    num_classes=0,
-)
-
-model = model.eval().to(device)
-data_config = timm.data.resolve_model_data_config(model)
-transforms = timm.data.create_transform(**data_config, is_training=False)
+model_id = "zer0int/CLIP-GmP-ViT-L-14"
+model_cls = CLIPModel.from_pretrained(model_id).to(device)
+config_cls = CLIPConfig.from_pretrained(model_id)
+processor_cls = CLIPProcessor.from_pretrained(model_id)
+tokenizer = CLIPTokenizer.from_pretrained(model_id)
 
 
 def get_non_empty_response(url):
@@ -71,8 +68,8 @@ def download_image(image_url, save_path='image.jpg'):
 def compute_and_add_in_db(img_path, img_id):
     image = Image.open(img_path).convert("RGB")
     with torch.inference_mode():
-        output = model.forward_features(transforms(image).unsqueeze(0).to(device))
-        embedding_objs = model.forward_head(output, pre_logits=True)
+        inputs = processor_cls(text=['three'], images=image, return_tensors="pt", padding=True).to(device)
+        embedding_objs = model_cls(**inputs).image_embeds
 
     emb = embedding_objs
     emb /= emb.norm(dim=-1)

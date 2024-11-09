@@ -11,7 +11,7 @@ RUN apt-get update && \
     
 RUN pip install -r requirements.txt
 
-RUN pip install pysqlite3-binary 
+RUN pip install pysqlite3-binary pillow
 
 COPY . .
 

@@ -1,4 +1,4 @@
 requests==2.32.3
 torch==2.4.0
 chromadb==0.5.18
-timm
+transformers
