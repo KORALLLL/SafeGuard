@@ -1,15 +1,30 @@
-import time
-import requests, os, torch
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
+import time, torch
+from transformers import CLIPModel, CLIPProcessor, CLIPConfig, CLIPTokenizer
+import requests, os
 import chromadb
-from chromadb import Documents, EmbeddingFunction
+from chromadb import EmbeddingFunction
 from chromadb.api.types import Embedding
 from typing import cast
-import tensorflow as tf
-tf.config.experimental.set_visible_devices([], 'GPU')
+from PIL import Image
 
 CHROMADB_URL = os.getenv('CHROMADB_URL', 'http://chromadb:8000')
 chroma_client = chromadb.HttpClient(host='chromadb', port='8000')
 collection = chroma_client.get_or_create_collection(name='clip')
+
+POLLING_URL = os.getenv('POLLING_URL', None)
+print("model Initialized")
+MODEL_NAME = "clip"
+device = 'cuda:0' 
+
+model_id = "zer0int/CLIP-GmP-ViT-L-14"
+model_cls = CLIPModel.from_pretrained(model_id).to(device)
+config_cls = CLIPConfig.from_pretrained(model_id)
+processor_cls = CLIPProcessor.from_pretrained(model_id)
+tokenizer = CLIPTokenizer.from_pretrained(model_id)
 
 
 def get_non_empty_response(url):
@@ -51,11 +66,12 @@ def download_image(image_url, save_path='image.jpg'):
 
 
 def compute_and_add_in_db(img_path, img_id):
-    embedding_objs = DeepFace.represent(
-        model_name="GhostFaceNet",
-        img_path=img_path,
-    )[0]['embedding']
-    emb = torch.Tensor(embedding_objs)
+    image = Image.open(img_path).convert("RGB")
+    with torch.inference_mode():
+        inputs = processor_cls(text=['three'], images=image, return_tensors="pt", padding=True).to(device)
+        embedding_objs = model_cls(**inputs).image_embeds
+
+    emb = embedding_objs
     emb /= emb.norm(dim=-1)
 
     emb = cast(Embedding, emb.squeeze().cpu().numpy())
@@ -77,11 +93,6 @@ def get_data(img_path, img_id):
         "result": embeds.ids
     }
     return json_res
-
-
-POLLING_URL = os.getenv('POLLING_URL', None)
-print("model Initialized")
-MODEL_NAME = "deepface"
 
 
 def main():

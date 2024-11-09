@@ -1,5 +1,6 @@
-requests
-torch
-deepface
-chromadb
-tensorflow
+requests==2.32.3
+torch==2.2.0
+deepface==0.0.93
+chromadb==0.5.18
+tf-keras
+numpy<2
