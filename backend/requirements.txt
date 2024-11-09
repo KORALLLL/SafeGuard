@@ -15,5 +15,9 @@ sqlparse==0.5.1
 tqdm==4.67.0
 urllib3==2.2.3
 python-dotenv
+<<<<<<< HEAD
 django-storages
 boto3
+=======
+django-storages
+>>>>>>> 0433b0d (fix: bux)

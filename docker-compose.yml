@@ -10,14 +10,14 @@ services:
     networks:
       - net
 
-  chromadb:
-    build:
-      context: ./ml/chromadb/
-      dockerfile: Dockerfile
-    ports:
-      - "8001:8000"
-    networks:
-      - net
+  # chromadb:
+  #   build:
+  #     context: ./ml/chromadb/
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8001:8000"
+  #   networks:
+  #     - net
 
   # clip:
   #   build:
