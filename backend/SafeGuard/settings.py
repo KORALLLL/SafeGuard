@@ -132,3 +132,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+ROOT_URLCONF = 'SafeGuard.urls'
