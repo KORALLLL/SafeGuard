@@ -1,0 +1,49 @@
+@font-face {
+    font-family: 'TTFirsNeue';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url('./TTFirsNeue-Black.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'TTFirsNeue';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('./TTFirsNeue-Medium.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'TTFirsNeue';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('./TTFirsNeue-Bold.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'TTFirsNeue';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('./TTFirsNeue-DemiBold.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'TTFirsNeue';
+    font-style: normal;
+    font-weight: 800;
+    font-display: swap;
+    src: url('./EuclidFlexSemiBold.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'TTFirsNeue';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('./TTFirsNeue-Regular.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'TTFirsNeue';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('./TTFirsNeue-Light.ttf') format('truetype');
+  }  

@@ -20,9 +20,8 @@
   - 🤗 Hugging Face
 - **Backend**:
   - ☁️ VK Cloud S3
-  - 🧩 Django, DRF (Django REST Framework)
-  - 🕸️ BeautifulSoup4
-  - 💾 SQLite
+  - 🧩 FastAPI
+  - 💾 SQLalchemy
   - 🐳 Docker, Docker Compose
 - **Frontend**:
   - ⚛️ React
@@ -71,7 +70,7 @@
 ## 🛡️ Дополнительные возможности
 
 - Распознавание **одинаковых людей** на разных изображениях.
-- Поиск копий изображений вне зависимости от типа изображения (фото или рисунок).
+- Поиск похожих изображений вне зависимости от типа изображения (фото или рисунок).
 - Готовность к интеграции с системами мониторинга и фильтрации контента.
 
 ## 👥 Наша команда
@@ -80,8 +79,8 @@
 |-----------------|-------------------------|------------------------------------|--------------------|
 | Бородин Кирилл  | Project manager, devops, ML, backend | [KORALLLL](https://github.com/KORALLLL) | @KORALLLLLL           |
 | Кудрявцев Василий| ML     | [SLENSER0](https://github.com/SLENSER0) | @slenser0      |
-| Юношева Екатерина | UI/UX    | [KaterinaYunosheva](https://github.com/KaterinaYunosheva) | @kar_o_man     |
-| Кожемякина Лиза| Frontend     | [KozhemyakinaElizaveta](https://github.com/KozhemyakinaElizaveta) | @romashka_ls     |
+| Юношева Катерина | UI/UX    | [KaterinaYunosheva](https://github.com/KaterinaYunosheva) | @kar_o_man     |
+| Кожемякина Елизавета| Frontend     | [KozhemyakinaElizaveta](https://github.com/KozhemyakinaElizaveta) | @romashka_ls     |
 | Разумовский Игорь| backend    | [IgorRazumvskii](https://github.com/IgorRazumvskii) | @igor_raz      |
 
 ## 📚 Документация

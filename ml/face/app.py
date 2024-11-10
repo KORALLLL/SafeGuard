@@ -106,8 +106,8 @@ def main():
 
             return_url = response_data['img_callback_url'] #+ "/" + MODEL_NAME
             send_json_back(return_url, processed_data)
-
-        time.sleep(1)
+        else:
+            time.sleep(5)
 
 
 if __name__ == "__main__":
