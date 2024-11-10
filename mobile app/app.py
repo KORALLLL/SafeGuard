@@ -263,6 +263,19 @@ def main():
             key='extract'
         )
 
+
+
+        if uploaded_file is not None:
+            try:
+                uploaded_image = Image.open(uploaded_file)
+                st.subheader("Uploaded Image")
+                st.image(uploaded_image, caption='Uploaded Image', use_container_width=True)
+                # Сбросить указатель файла после открытия
+                uploaded_file.seek(0)
+            except Exception as e:
+                st.error(f"Ошибка при открытии изображения: {e}")
+
+
         if st.button("Extract Images", key='extract_button'):
             if uploaded_file:
                 with st.spinner("Processing image..."):
