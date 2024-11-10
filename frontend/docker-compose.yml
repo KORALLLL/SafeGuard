@@ -1,0 +1,7 @@
+version: '3'
+services:
+  safeguard-frontend:
+    build: .
+    ports:
+      - "3000:80"
+    container_name: safeguard-frontend

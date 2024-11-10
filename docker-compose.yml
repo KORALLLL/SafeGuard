@@ -61,7 +61,6 @@ services:
     networks:
       - net
     environment:
-
       - POLLING_URL=http://restapi:8000/api/v1/image/poll
       - CHROMADB_URL=http://chromadb:8001
     depends_on:
