@@ -264,7 +264,6 @@ def main():
         )
 
 
-
         if uploaded_file is not None:
             try:
                 uploaded_image = Image.open(uploaded_file)
@@ -274,6 +273,7 @@ def main():
                 uploaded_file.seek(0)
             except Exception as e:
                 st.error(f"Ошибка при открытии изображения: {e}")
+
 
 
         if st.button("Extract Images", key='extract_button'):
@@ -389,3 +389,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
