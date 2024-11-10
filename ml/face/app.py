@@ -89,6 +89,7 @@ print("model Initialized")
 MODEL_NAME = "DEEPFACE"
 
 
+
 def main():
     polling_url = os.path.join(POLLING_URL, MODEL_NAME)
 

@@ -2,10 +2,10 @@ __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
-
 import logging
 import time
 import torch
+
 from transformers import CLIPModel, CLIPProcessor, CLIPConfig, CLIPTokenizer
 import requests, os
 import chromadb
@@ -20,14 +20,17 @@ logging.basicConfig(
     level=logging.INFO
 )
 
+
 CHROMADB_URL = os.getenv('CHROMADB_URL', 'http://chromadb:8000')
 chroma_client = chromadb.HttpClient(host='chromadb', port='8000')
 collection = chroma_client.get_or_create_collection(name='clip')
 
 POLLING_URL = os.getenv('POLLING_URL', None)
+
 logging.info("Model Initialized")
 MODEL_NAME = "CLIP"
 device = 'cuda:0'
+
 
 model_id = "zer0int/CLIP-GmP-ViT-L-14"
 model_cls = CLIPModel.from_pretrained(model_id).to(device)
@@ -86,6 +89,7 @@ def compute_and_add_in_db(img_path, img_id):
         embedding_objs = model_cls(**inputs).image_embeds
 
     emb = embedding_objs.clone()
+
     emb /= emb.norm(dim=-1)
 
     emb = cast(Embedding, emb.squeeze().cpu().numpy())
