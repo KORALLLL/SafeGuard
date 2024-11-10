@@ -2,7 +2,10 @@ __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
-import time, torch
+import logging
+import time
+import torch
+
 from transformers import CLIPModel, CLIPProcessor, CLIPConfig, CLIPTokenizer
 import requests, os
 import chromadb
@@ -11,14 +14,23 @@ from chromadb.api.types import Embedding
 from typing import cast
 from PIL import Image
 
+# Настройка логирования
+logging.basicConfig(
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
+
+
 CHROMADB_URL = os.getenv('CHROMADB_URL', 'http://chromadb:8000')
 chroma_client = chromadb.HttpClient(host='chromadb', port='8000')
 collection = chroma_client.get_or_create_collection(name='clip')
 
 POLLING_URL = os.getenv('POLLING_URL', None)
-print("model Initialized")
-MODEL_NAME = "clip"
-device = 'cuda:0' 
+
+logging.info("Model Initialized")
+MODEL_NAME = "CLIP"
+device = 'cuda:0'
+
 
 model_id = "zer0int/CLIP-GmP-ViT-L-14"
 model_cls = CLIPModel.from_pretrained(model_id).to(device)
@@ -30,38 +42,43 @@ tokenizer = CLIPTokenizer.from_pretrained(model_id)
 def get_non_empty_response(url):
     while True:
         try:
+            # logging.info(f"Polling for response from {url}")
             response = requests.get(url)
             if response.status_code == 200 and response.json():
+                # logging.info("Received non-empty response.")
                 return response.json()
-            print("Waiting for non-empty response...")
-        except Exception as e: print("error", e)
+            # logging.warning("Waiting for non-empty response...")
+        except Exception as e:
+            logging.error(f"Error while polling for response: {e}")
         time.sleep(2)
 
 
 def send_json_back(url, data):
     try:
-        response = requests.post(url, json=data)
+        logging.info(f"Sending data to {url}")
+        response = requests.get(url, json=data)
         if response.status_code == 200:
-            print("JSON sent successfully!")
+            logging.info("JSON sent successfully!")
         else:
-            print("Failed to send JSON:", response.status_code)
+            logging.error(f"Failed to send JSON: {response.status_code}")
     except Exception as e:
-        print("Error sending JSON:", e)
+        logging.error(f"Error sending JSON: {e}")
 
 
 def download_image(image_url, save_path='image.jpg'):
     try:
+        # logging.info(f"Downloading image from {image_url}")
         response = requests.get(image_url, stream=True)
         if response.status_code == 200:
             with open(save_path, 'wb') as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
-            print(f"Downloaded image to {save_path}")
+            # logging.info(f"Downloaded image to {save_path}")
             return save_path
         else:
-            print("Failed to download image:", response.status_code)
+            logging.error(f"Failed to download image: {response.status_code}")
     except Exception as e:
-        print("Error downloading image:", e)
+        logging.error(f"Error downloading image: {e}")
         return None
 
 
@@ -71,7 +88,8 @@ def compute_and_add_in_db(img_path, img_id):
         inputs = processor_cls(text=['three'], images=image, return_tensors="pt", padding=True).to(device)
         embedding_objs = model_cls(**inputs).image_embeds
 
-    emb = embedding_objs
+    emb = embedding_objs.clone()
+
     emb /= emb.norm(dim=-1)
 
     emb = cast(Embedding, emb.squeeze().cpu().numpy())
@@ -79,6 +97,7 @@ def compute_and_add_in_db(img_path, img_id):
         embeddings=[emb],
         ids=[img_id]
     )
+    # logging.info(f"Added image {img_id} to the database with embedding.")
     return emb
 
 
@@ -90,8 +109,9 @@ def get_data(img_path, img_id):
         n_results=20
     )
     json_res = {
-        "result": embeds.ids
+        "result": embeds['ids']
     }
+    logging.info(f"Querying database for similar images. Results: {json_res}")
     return json_res
 
 
@@ -100,27 +120,24 @@ def main():
 
     while True:
         response_data = get_non_empty_response(polling_url)
+        # logging.info(f"{response_data}")
 
-        if 'img_url' in response_data:
-            img_url = response_data['img_url']
+        if 's3_path' in response_data:
+            img_url = response_data['s3_path']
+            # logging.info(f"Received image URL: {img_url}")
             img_path = download_image(img_url)
             if img_path is None:
                 time.sleep(5)
                 continue
 
-            return_type = response_data['return']
-            if return_type == 'true':
-                processed_data = get_data(img_path, response_data['id'])
+            processed_data = get_data(img_path, str(response_data['id']))
 
-            else:
-                _ = compute_and_add_in_db(img_path, response_data['id'])
-                processed_data = {"status": "ok"}
-
-            return_url = response_data['json_callback_url'] + "/" + MODEL_NAME
+            return_url = response_data['img_callback_url'] #+ "/" + MODEL_NAME
             send_json_back(return_url, processed_data)
 
-        time.sleep(5)
+        time.sleep(1)
 
 
 if __name__ == "__main__":
+    logging.info("Starting the main loop.")
     main()

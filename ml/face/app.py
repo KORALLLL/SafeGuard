@@ -30,7 +30,7 @@ def get_non_empty_response(url):
 
 def send_json_back(url, data):
     try:
-        response = requests.post(url, json=data)
+        response = requests.get(url, json=data)
         if response.status_code == 200:
             print("JSON sent successfully!")
         else:
@@ -79,14 +79,15 @@ def get_data(img_path, img_id):
         n_results=20
     )
     json_res = {
-        "result": embeds.ids
+        "result": embeds['ids']
     }
     return json_res
 
 
 POLLING_URL = os.getenv('POLLING_URL', None)
 print("model Initialized")
-MODEL_NAME = "deepface"
+MODEL_NAME = "DEEPFACE"
+
 
 
 def main():
@@ -95,25 +96,19 @@ def main():
     while True:
         response_data = get_non_empty_response(polling_url)
 
-        if 'img_url' in response_data:
-            img_url = response_data['img_url']
+        if 's3_path' in response_data:
+            img_url = response_data['s3_path']
             img_path = download_image(img_url)
             if img_path is None:
                 time.sleep(5)
                 continue
 
-            return_type = response_data['return']
-            if return_type == 'true':
-                processed_data = get_data(img_path, response_data['id'])
+            processed_data = get_data(img_path, str(response_data['id']))
 
-            else:
-                _ = compute_and_add_in_db(img_path, response_data['id'])
-                processed_data = {"status": "ok"}
-
-            return_url = response_data['json_callback_url'] + "/" + MODEL_NAME
+            return_url = response_data['img_callback_url'] #+ "/" + MODEL_NAME
             send_json_back(return_url, processed_data)
 
-        time.sleep(5)
+        time.sleep(1)
 
 
 if __name__ == "__main__":
