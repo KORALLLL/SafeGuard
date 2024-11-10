@@ -88,7 +88,6 @@ POLLING_URL = os.getenv('POLLING_URL', None)
 print("model Initialized")
 MODEL_NAME = "DEEPFACE"
 
-
 def main():
     polling_url = os.path.join(POLLING_URL, MODEL_NAME)
 
@@ -108,6 +107,7 @@ def main():
             send_json_back(return_url, processed_data)
         else:
             time.sleep(5)
+
 
 
 if __name__ == "__main__":

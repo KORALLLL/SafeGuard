@@ -2,10 +2,10 @@ __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
-
 import logging
 import time
 import torch
+
 from transformers import CLIPModel, CLIPProcessor, CLIPConfig, CLIPTokenizer
 import requests, os
 import chromadb
